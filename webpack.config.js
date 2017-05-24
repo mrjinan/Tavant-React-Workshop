@@ -5,8 +5,7 @@ HTMLWebpackPlugin = require('html-webpack-plugin');
 module.exports = () => {
     return {
         entry: {
-            'main': './src/index',
-            'vendor': './src/vendor'
+            'main':'./src/index'
         },
         target: 'web',
         output: {
@@ -39,7 +38,7 @@ module.exports = () => {
         },
         plugins: [
             new HTMLWebpackPlugin({
-                template: 'src/index.html',
+                template: './src/index.html',
             })
         ],
         devServer: {
