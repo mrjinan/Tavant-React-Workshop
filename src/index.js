@@ -1,59 +1,50 @@
 import React from 'react';
 import { render } from 'react-dom';
 
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import AddToDoComponent from './Components/AddToDoComponent';
 
-class Timer extends React.Component {
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ToDoList from './Components/ToDoListComponent';
+import NavBarComponent from './Components/NavBarComponent';
+const style = {
+    divStyle: {
+        padding: '15px'
+
+    }
+}
+
+
+class App extends React.Component {
     constructor() {
         super();
-        this.state = { time: new Date().toLocaleTimeString(), index: 0 };
-    }
-
-    componentWillMount() {
-        console.log('componentWillMount()')
+        this.state = { toDoList: [] };
     }
 
     componentDidMount() {
-        setInterval(function () {
-            /** TODO - Change this  */
-            this.setState({time: new Date().toLocaleTimeString(), index : this.state.index + 1})
-        }.bind(this), 1000)
-    }
-    componentWillReceiveProps() {
-        console.log('componentWillReceiveProps()')
-
-    }
-    shouldComponentUpdate() {
-        console.log('shouldComponentUpdate()')
-        
-        return this.state.index % 2 === 0 ? false: true;
-    }
-    componentWillUpdate() {
-        console.log('componentWillUpdate()')
-
+        fetch('https://jsonplaceholder.typicode.com/todos')
+            .then(response => response.json())
+            .then(response => this.setState({ toDoList: response }))
     }
 
-    componentDidUpdate() {
-        console.log('componentDidUpdate()')
-
-    }
     render() {
-        return (<div><div>This is timer</div><div>{this.state.time}</div></div>)
+
+        return (
+
+            <div style={style.divStyle} className="container-fluid">
+                <NavBarComponent />
+                <ToDoList tasks={this.state.toDoList} />
+            </div>
+
+        )
     }
 }
-
-
-const App = function (props) {
-    return (
+render(
+    <Router>
         <div>
-            <div>{props.obj.welcomeMessage}</div>
-            <div>{props.obj.subTitle}</div>
-            <Timer />
-        </div>)
-}
-const obj = {
-    welcomeMessage: "Hello World",
-    subTitle: "SomeOther Message"
-
-}
-render(<App obj={obj} />, document.getElementById('app'));
+            <Route path="/" component={App}>
+            </Route>
+        </div>
+    </Router>, document.getElementById('app'));
 
